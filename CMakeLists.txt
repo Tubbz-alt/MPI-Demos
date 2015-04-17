@@ -12,6 +12,8 @@ cmake_minimum_required( VERSION 2.8 FATAL_ERROR )
 #   Set the Project Name
 project(mpi-demos)
 
+#  Add C++11x Support
+SET( CMAKE_CXX_FLAGS "-std=c++11 -rdynamic -ldl")
 
 #-------------------#
 #-    Find MPI     -#

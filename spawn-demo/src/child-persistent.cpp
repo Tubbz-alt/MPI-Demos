@@ -12,6 +12,9 @@
 
 using namespace std;
 
+
+const std::string application_name = "Persistent-Child";
+
 /**
  * @brief Main Function
  */
@@ -28,7 +31,7 @@ int main( int argc, char* argv[] )
     MPI_Comm_get_parent( &parent_comm );
 
     // Print Entry
-    std::cout << "Start of Persistent Child" << std::endl;
+    std::cout << application_name << " : Starting" << std::endl;
 
     sleep(4);
 
@@ -44,7 +47,7 @@ int main( int argc, char* argv[] )
     MPI_Finalize();
 
     // End of Persistent Child
-    std::cout << "End of Persistent Child" << std::endl;
+    std::cout << application_name << " : Shutting Down" << std::endl;
 
     return 0;
 }

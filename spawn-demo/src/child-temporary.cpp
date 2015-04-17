@@ -15,6 +15,9 @@
 
 using namespace std;
 
+// Application Name
+const std::string application_name = "Temporary-Child ";
+
 /**
  * @brief Main Function
  */
@@ -30,7 +33,7 @@ int main( int argc, char* argv[] )
     MPI_Init_thread( &argc, &argv, mpi_thread_required, &mpi_thread_provided );
     
     // Print Entry
-    std::cout << "Start of Temporary Child" << std::endl;
+    std::cout << application_name << " : Starting " << std::endl;
 
     sleep(sleep_count);
 
@@ -38,7 +41,7 @@ int main( int argc, char* argv[] )
     MPI_Finalize();
 
     // End of Persistent Child
-    std::cout << "End of Temporary Child" << std::endl;
+    std::cout << application_name << " : Shutting Down" << std::endl;
 
     return 0;
 }
