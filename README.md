@@ -5,7 +5,7 @@ MPI Demos
 A collection of MPI demo programs to show various functionality.
 
 ####Disclaimer####
-This is proof-of-concept only.  Do not expect this to scale well or work in any generic sense.
+This is proof-of-concept only.  Do not expect this to scale well or work in any production scale.
 
 spawn-demo
 ----------

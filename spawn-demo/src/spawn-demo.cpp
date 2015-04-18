@@ -94,11 +94,11 @@ int main( int argc, char* argv[] )
     temp_argv_1 = new char*[2];
     temp_argv_2 = new char*[2];
     segfault_argv = new char*[2];
-    temp_argv_1[0] = "1";
+    temp_argv_1[0] = (char*)"1";
     temp_argv_1[1] = NULL;
-    temp_argv_2[0] = "2";
+    temp_argv_2[0] = (char*)"2";
     temp_argv_2[1] = NULL;
-    segfault_argv[0] = "0";
+    segfault_argv[0] = (char*)"0";
     segfault_argv[1] = NULL;
 
 
@@ -168,7 +168,7 @@ int main( int argc, char* argv[] )
                     &child_segfault_errcode );
 
     // Update the segfault handler to allow it to reboot cleanly
-    segfault_argv[0] = "1";
+    segfault_argv[0] = (char*)"1";
     
     // Create the Message Receiver
     MPI_Message_Receiver message_receiver(child_segfault_intercomm);

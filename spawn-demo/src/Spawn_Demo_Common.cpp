@@ -103,7 +103,7 @@ void Segfault_Message::Free_Buffer()
     if( m_buffer != NULL && m_buffer != nullptr )
     {
         delete [] m_buffer;
-        m_buffer == nullptr;
+        m_buffer = nullptr;
     }
 }
 
