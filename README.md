@@ -13,7 +13,9 @@ connect-demo
 
 Creates several running sessions and connects them via the hydra nameserver.
 
-More information can be found [here][https://wiki.mpich.org/mpich/index.php/Using_the_Hydra_Process_Manager#Name_Publishing].
+More information can be found at the [MPICH Hydra Wiki][].
+
+[MPICH Hydra Wiki]: https://wiki.mpich.org/mpich/index.php/Using_the_Hydra_Process_Manager#Name_Publishing
 
 
 spawn-demo
