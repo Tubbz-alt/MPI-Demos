@@ -34,6 +34,11 @@ SET( LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib )
 #-------------------------------------#
 #add_subdirectory(common)
 
+#----------------------------------#
+#-     Build the Connect Demo     -#
+#----------------------------------#
+add_subdirectory(connect-demo)
+
 #--------------------------------#
 #-     Build the Spawn Demo     -#
 #--------------------------------#
