@@ -17,6 +17,14 @@ sending back a message to the main executable to have it respawn it.
     #  Run Spawn Demo
     ./scripts/run-spawn-demo.sh
 
+Software Requirements
+---------------------
+
++ __mpich__
++ __pthreads__
+
+
+
 Compiling Demo Code
 -------------------
 
