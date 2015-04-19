@@ -29,10 +29,15 @@ SET( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin )
 SET( LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib )
 
 
+#------------------------------#
+#-   Include the base path    -#
+#------------------------------#
+include_directories(.)
+
 #-------------------------------------#
 #-     Build the Common Libraries    -#
 #-------------------------------------#
-#add_subdirectory(common)
+add_subdirectory(common)
 
 #----------------------------------#
 #-     Build the Connect Demo     -#

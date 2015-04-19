@@ -1,28 +1,33 @@
 #!/bin/sh
 
 #  Set our MPI Arguments
-MPI_ARGS='-envall -nameserver localhost'
+MPI_ARGS=""
+
+#  Port
+PORT=1234
 
 #  Set our EXE
 CLIENT_EXE=./release/bin/connect-client-demo
 SERVER_EXE=./release/bin/connect-server-demo
 
 #  Run Nameserver
-echo 'Starting nameserver'
-hydra_nameserver &
-NAMESERVER_PID=$!
-echo "-> Nameserver PID: $NAMESERVER_PID"
+#echo 'Starting nameserver'
+#hydra_nameserver &
+#hydra_nameserver -port $PORT &
+#NAMESERVER_PID=$!
+#echo "-> Nameserver PID: $NAMESERVER_PID"
+
+#sleep 1
 
 #  Run Server
-mpiexec ${MPI_ARGS} -n 1 ${SERVER_EXE} &
+mpiexec ${MPI_ARGS} -n 1 ${SERVER_EXE} $PORT &
 SERVER_PID=$!
 echo "-> Server PID: $SERVER_PID"
 
-#  Sleep
 sleep 1
 
 #  Run Client 
-mpiexec ${MPI_ARGS} -n 1 ${CLIENT_EXE} &
+mpirun ${MPI_ARGS} -n 1 -nameserver localhost:${PORT} ${CLIENT_EXE} $PORT &
 CLIENT_PID=$!
 echo "-> Client PID: $CLIENT_PID"
 

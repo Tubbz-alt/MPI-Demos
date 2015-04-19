@@ -7,11 +7,20 @@ A collection of MPI demo programs to show various functionality.
 ####Disclaimer####
 This is proof-of-concept only.  Do not expect this to scale well or work in any production scale.
 
+common
+------
+
+Contains a set of high-level abstractions which make using the more complicated feature of MPI more palitable.
+
+####MPI\_Connection\_Manager####
+
+Stores MPI configuration information to hopefully make connecting easier.
 
 connect-demo
 ------------
 
-Creates several running sessions and connects them via the hydra nameserver.
+Creates several running sessions and connects them via the hydra nameserver.  This is very useful if you
+have separate MPI instances running and you want to connect them together. 
 
 More information can be found at the [MPICH Hydra Wiki][].
 

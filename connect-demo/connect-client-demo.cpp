@@ -5,10 +5,15 @@
  */
 #include <iostream>
 #include <string>
+#include <unistd.h>
 #include <vector>
 
 // MPI Libraries
 #include <mpi.h>
+
+// Demo Libraries
+#include <common/MPI_Connection_Manager.hpp>
+#include <common/Socket.hpp>
 
 using namespace std;
 
@@ -16,52 +21,39 @@ using namespace std;
 // Application Name
 const std::string application_name = "connect-client-demo";
 
-// Global Variables
-std::vector<std::string> ports;
-MPI_Comm intercomm;
-
-const std::string service_name = "connect-server";
 
 /**
  * @brief Main Function
  */
 int main( int argc, char* argv[] )
 {
-
-    // Misc Variables
-    char temp_str[MPI_MAX_PORT_NAME];
     
     // Print Entry
     std::cout << application_name << " : Starting" << std::endl;
 
-    // Initialize MPI
-    int mpi_thread_required = MPI_THREAD_MULTIPLE;
-    int mpi_thread_provided;
-    MPI_Init_thread( &argc, 
-                     &argv, 
-                     mpi_thread_required, 
-                     &mpi_thread_provided );
+    // Create the Connection Manager
+    MPI_Connection_Manager::ptr_t connection_manager(new MPI_Connection_Manager());
 
-    // Lookup the name
-    std::cout << application_name << " : Lookup Name" << std::endl;
-    MPI_Lookup_name(service_name.c_str(), MPI_INFO_NULL, temp_str );
-    ports.push_back(temp_str);
+    // Initialize
+    connection_manager->Initialize( argc, argv );
 
-    // Connect
-    std::cout << application_name << " : Connecting" << std::endl;
-    MPI_Comm_connect ( ports.front().c_str(), MPI_INFO_NULL, 0, MPI_COMM_SELF, &intercomm ); 
+    // Connect with the remote server
+    MPI_Connection remote_connection;
+    remote_connection = connection_manager->Connect_Remote("localhost", 1234);
     
-
+    // Wait for initial reponse
+    std::cout << application_name << " : Received Message: " << remote_connection.Recv_Message() << std::endl;
+    
     // Disconnect
-    std::cout << application_name << " : Disconnecting" << std::endl;
-    MPI_Comm_disconnect( &intercomm );
-
-    // Finalize MPI
-    MPI_Finalize();
+    remote_connection.Disconnect();
     
+    // Finalize
+    connection_manager->Finalize();
+
     // Log Exit
     std::cout << application_name << " : Exiting" << std::endl;
 
     return 0;
+
 }
 

@@ -18,9 +18,11 @@ add_executable( connect-server-demo
 
 target_link_libraries( connect-server-demo
                        ${MPI_LIBRARIES}
+                       MPI_Demo_Common
 )
 
 target_link_libraries( connect-client-demo
                        ${MPI_LIBRARIES}
+                       MPI_Demo_Common
 )
 
