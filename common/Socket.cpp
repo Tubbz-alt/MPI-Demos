@@ -89,6 +89,13 @@ Socket Socket::Listen( const int& port_number )
     server_addr.sin_family = AF_INET;
     server_addr.sin_addr.s_addr = INADDR_ANY;
     server_addr.sin_port = htons(port_number);
+    
+    // Set socket options
+    int optval;
+    if( setsockopt( sock_fd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) < 0 ){
+        std::cerr << "error on setsockopt" << std::endl;
+        std::exit(-1);
+    }
 
     // Bind
     if( bind( sock_fd, (sockaddr*)&server_addr, sizeof(server_addr)) < 0 ){

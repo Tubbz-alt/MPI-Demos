@@ -4,7 +4,7 @@
 MPI_ARGS=""
 
 #  Port
-PORT=1234
+PORT=1233
 
 #  Set our EXE
 CLIENT_EXE=./release/bin/connect-client-demo
@@ -27,13 +27,11 @@ echo "-> Server PID: $SERVER_PID"
 sleep 1
 
 #  Run Client 
-mpirun ${MPI_ARGS} -n 1 -nameserver localhost:${PORT} ${CLIENT_EXE} $PORT &
+mpirun ${MPI_ARGS} -n 1 ${CLIENT_EXE} $PORT &
 CLIENT_PID=$!
 echo "-> Client PID: $CLIENT_PID"
 
 echo 'Waiting for completion'
 wait $SERVER_PID $CLIENT_PID
 
-echo 'Shutting Down Nameserver'
-kill $NAMESERVER_PID
 

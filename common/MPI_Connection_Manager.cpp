@@ -16,21 +16,30 @@
 
 
 /**
- * MPI Connection
- */
+ * Constructor
+*/
 MPI_Connection::MPI_Connection()
-  : m_communicator(MPI_COMM_WORLD)
 {
-
 }
 
 /**
  * MPI Connection
  */
-MPI_Connection::MPI_Connection(MPI_Comm const& comm)
-  : m_communicator(comm)
+MPI_Connection::MPI_Connection(  std::string const& system_name,
+                                 MPI_Comm const& comm)
+  :  m_system_name(system_name),
+     m_class_name("MPI_Connection"),
+     m_inter_communicator(comm)
 {
+    MPI_Intercomm_merge( m_inter_communicator, true, &m_intra_communicator );
 
+    MPI_Comm_size(m_intra_communicator, &m_comm_size);
+    MPI_Comm_rank(m_intra_communicator, &m_comm_rank);
+
+    int flag1, flag2;
+    MPI_Comm_test_inter( m_inter_communicator, &flag1);
+    MPI_Comm_test_inter( m_intra_communicator, &flag2);
+    
 }
 
 /**
@@ -38,7 +47,7 @@ MPI_Connection::MPI_Connection(MPI_Comm const& comm)
 */
 void MPI_Connection::Disconnect()
 {
-    MPI_Comm_disconnect(&m_communicator);
+    MPI_Comm_disconnect(&m_inter_communicator);
 }
 
 /**
@@ -46,7 +55,7 @@ void MPI_Connection::Disconnect()
 */
 void MPI_Connection::Send_Message( const std::string& message, const int& rank )
 {
-    MPI_Send( message.c_str(), message.size(), MPI_CHAR, rank, 0, m_communicator);
+    MPI_Send( message.c_str(), message.size(), MPI_CHAR, rank, 0, m_intra_communicator);
 }
 
 
@@ -58,22 +67,29 @@ std::string MPI_Connection::Recv_Message( ){
     // Get message size
     int incoming_msg_size;
     MPI_Status status;
-    MPI_Probe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+    MPI_Probe(MPI_ANY_SOURCE, MPI_ANY_TAG, m_intra_communicator, &status);
     MPI_Get_count(&status, MPI_BYTE, &incoming_msg_size);
-    
+
     // Receive Message
     char* buffer = new char[incoming_msg_size];
-    MPI_Recv( buffer,incoming_msg_size, MPI_CHAR, status.MPI_SOURCE, status.MPI_TAG, m_communicator, &status );
+    MPI_Recv( buffer,incoming_msg_size, MPI_CHAR, status.MPI_SOURCE, status.MPI_TAG, m_intra_communicator, &status );
 
     // Set buffer
     std::string output = buffer;
-    std::cout << "TEMP: " << buffer << std::endl;
 
     // Delete buffer
     delete [] buffer;
 
     // return data
     return output;
+}
+
+/**
+ * Constructor
+ */
+MPI_Connection_Manager::MPI_Connection_Manager( const std::string& system_name )
+  : m_system_name(system_name)
+{
 }
 
 /**
@@ -88,14 +104,18 @@ void MPI_Connection_Manager::Initialize( int argc, char* argv[] )
                      mpi_thread_required, 
                      &m_mpi_thread_provided );
 
-
+    if( mpi_thread_required != m_mpi_thread_provided )
+    {
+        std::cerr << "warning: MPI_Init_thread requested " << mpi_thread_required << " but got " << m_mpi_thread_provided << std::endl;
+    }
 
 }
 
 /**
  * Synchronize with a remote MPI
  */
-MPI_Connection MPI_Connection_Manager::Connect_Remote( const std::string& hostname,
+MPI_Connection MPI_Connection_Manager::Connect_Remote( const std::string& system_name,
+                                                       const std::string& hostname,
                                                        const int& port)
 {
     // Create a socket
@@ -106,17 +126,21 @@ MPI_Connection MPI_Connection_Manager::Connect_Remote( const std::string& hostna
 
     // Connect
     MPI_Comm intercomm;
-    MPI_Comm_connect( mpi_port.c_str(), MPI_INFO_NULL, 0, MPI_COMM_SELF, &intercomm );
+    MPI_Comm_connect( mpi_port.c_str(), MPI_INFO_NULL, 0, MPI_COMM_WORLD, &intercomm );
+
+    // Close the connection
+    connection.Close();
 
     // Return 
-    return MPI_Connection( intercomm );
+    return MPI_Connection( system_name, intercomm );
 }
 
 
 /**
  * Synchronize with a remote MPI
 */
-MPI_Connection MPI_Connection_Manager::Connect_Client( const int& port )
+MPI_Connection MPI_Connection_Manager::Connect_Client( const std::string& system_name, 
+                                                       const int& port )
 {
     // Create a socket
     Socket connection = Socket::Listen( port );
@@ -130,9 +154,15 @@ MPI_Connection MPI_Connection_Manager::Connect_Client( const int& port )
 
     // Return connection
     MPI_Comm intercomm;
-    MPI_Comm_accept( mpi_port, MPI_INFO_NULL, 0, MPI_COMM_SELF, &intercomm);
+    MPI_Comm_accept( mpi_port, MPI_INFO_NULL, 0, MPI_COMM_WORLD, &intercomm);
 
-    return MPI_Connection( intercomm );
+    // Close the Port
+    MPI_Close_port( mpi_port );
+
+    // Close the connection
+    connection.Close();
+
+    return MPI_Connection( system_name, intercomm );
 }
 
 

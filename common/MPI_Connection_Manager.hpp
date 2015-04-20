@@ -8,6 +8,7 @@
 
 // C++ Standard Libraries
 #include <memory>
+#include <string>
 
 // MPI Libraries
 #include<mpi.h>
@@ -28,7 +29,8 @@ class MPI_Connection{
         /**
          * @brief Constructor
          */
-        MPI_Connection( MPI_Comm const& comm );
+        MPI_Connection( std::string const& system_name,
+                        MPI_Comm const& comm );
 
 
         /**
@@ -50,8 +52,21 @@ class MPI_Connection{
 
     private:
         
+        /// System Name
+        std::string m_system_name;
+
+        /// Class Name
+        std::string m_class_name;
+
         /// MPI Communicator
-        MPI_Comm m_communicator;
+        MPI_Comm m_inter_communicator;
+        MPI_Comm m_intra_communicator;
+        
+        /// Comm Size
+        int m_comm_size;
+
+        /// Comm Rank
+        int m_comm_rank;
 
 }; // End of MPI_Connection Class
 
@@ -66,6 +81,11 @@ class MPI_Connection_Manager{
         
         /// Pointer Type
         typedef std::shared_ptr<MPI_Connection_Manager> ptr_t;
+
+        /**
+         * @brief Constructor
+         */
+        MPI_Connection_Manager( const std::string& system_name );
 
 
         /**
@@ -83,17 +103,22 @@ class MPI_Connection_Manager{
         /**
          * @brief Connect with remote Client.
          */
-        MPI_Connection Connect_Remote( const std::string& hostname,
+        MPI_Connection Connect_Remote( const std::string& system_name,
+                                       const std::string& hostname,
                                        const int& port );
 
 
         /**
          * @brief Connect with a remote server.
          */
-        MPI_Connection Connect_Client( const int& port );
+        MPI_Connection Connect_Client( const std::string& system_name,
+                                       const int& port );
 
 
     private:
+
+        /// System Name
+        std::string m_system_name;
         
         /// MPI Thread Type
         int m_mpi_thread_provided;

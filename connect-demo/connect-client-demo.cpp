@@ -32,17 +32,18 @@ int main( int argc, char* argv[] )
     std::cout << application_name << " : Starting" << std::endl;
 
     // Create the Connection Manager
-    MPI_Connection_Manager::ptr_t connection_manager(new MPI_Connection_Manager());
+    MPI_Connection_Manager::ptr_t connection_manager(new MPI_Connection_Manager(application_name));
 
     // Initialize
     connection_manager->Initialize( argc, argv );
 
     // Connect with the remote server
     MPI_Connection remote_connection;
-    remote_connection = connection_manager->Connect_Remote("localhost", 1234);
+    remote_connection = connection_manager->Connect_Remote(application_name,"localhost", 1234);
     
     // Wait for initial reponse
-    std::cout << application_name << " : Received Message: " << remote_connection.Recv_Message() << std::endl;
+    std::string msg = remote_connection.Recv_Message();
+    std::cout << application_name << " : Received Message: " << msg << std::endl;
     
     // Disconnect
     remote_connection.Disconnect();

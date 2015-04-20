@@ -32,17 +32,17 @@ int main( int argc, char* argv[] )
     std::cout << application_name << " : Starting" << std::endl;
 
     // Create the Connection Manager
-    MPI_Connection_Manager::ptr_t connection_manager(new MPI_Connection_Manager());
+    MPI_Connection_Manager::ptr_t connection_manager(new MPI_Connection_Manager(application_name));
 
     // Initialize
     connection_manager->Initialize( argc, argv );
-    
+        
     // Connect with client
-    MPI_Connection remote_connection = connection_manager->Connect_Client(1234);
+    MPI_Connection remote_connection = connection_manager->Connect_Client(application_name, 1234);
 
     // Send a message
     std::cout << application_name << " : Sending Message" << std::endl;
-    remote_connection.Send_Message("Connection Established", 0);
+    remote_connection.Send_Message("Connection Established", 1);
 
     // Disconnect
     remote_connection.Disconnect();
