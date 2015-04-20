@@ -43,7 +43,7 @@ MPI_RPC_Host::MPI_RPC_Host()
 */
 void MPI_RPC_Host::Execute_Command( const std::string& method_name,
                                     MPI_RPC_Arguments const& arguments,
-                                    MPI_RPC_Results   const& results )
+                                    MPI_RPC_Results& results )
 {
     // Fetch the host
     MPI_RPC_Host::ptr_t host = host_instance;

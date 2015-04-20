@@ -6,6 +6,7 @@
 #include "Socket.hpp"
 
 // C++ Standard Libraries
+#include <cstring>
 #include <iostream>
 #include <netdb.h>
 #include <unistd.h>
