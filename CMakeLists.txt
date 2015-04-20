@@ -39,14 +39,31 @@ include_directories(.)
 #-------------------------------------#
 add_subdirectory(common)
 
+#---------------------#
+#-      Options      -#
+#---------------------#
+option( BUILD_CONNECT_DEMO "Build the MPI Connection demo." ON )
+option( BUILD_SPAWN_DEMO   "Build the MPI Spawn demo."      ON )
+option( BUILD_RPC_DEMO     "Build the MPI RPC demo."        ON )
+
 #----------------------------------#
 #-     Build the Connect Demo     -#
 #----------------------------------#
-add_subdirectory(connect-demo)
+if( BUILD_CONNECT_DEMO )
+    add_subdirectory(connect-demo)
+endif()
 
 #--------------------------------#
 #-     Build the Spawn Demo     -#
 #--------------------------------#
-add_subdirectory(spawn-demo)
+if( BUILD_SPAWN_DEMO )
+    add_subdirectory(spawn-demo)
+endif()
 
+#------------------------------#
+#-     Build the RPC Demo     -#
+#------------------------------#
+if( BUILD_RPC_DEMO )    
+    add_subdirectory(rpc-demo)
+endif()
 

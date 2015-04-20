@@ -20,6 +20,10 @@ class MPI_Connection{
 
     public:
         
+        /// Pointer Type
+        typedef std::shared_ptr<MPI_Connection> ptr_t;
+
+
         /**
          * @brief Constructor
          */
