@@ -16,11 +16,17 @@ Contains a set of high-level abstractions which make using the more complicated 
 
 Stores MPI configuration information to hopefully make connecting easier.
 
+####Socket####
+
+Basic abstraction of the BSD Socket interface.  Mostly used internally.
+
 connect-demo
 ------------
 
 Creates several running sessions and connects them via the hydra nameserver.  This is very useful if you
-have separate MPI instances running and you want to connect them together. 
+have separate MPI instances running and you want to connect them together. I had problems getting the nameserver working
+on OS X due to ssh and other quirks, so to avoid that, I pass the port info from `MPI_Open_port` via socket from the
+Server to the Client.
 
 More information can be found at the [MPICH Hydra Wiki][].
 
