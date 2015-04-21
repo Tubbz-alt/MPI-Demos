@@ -5,9 +5,19 @@
 #    Purpose:    Build the MPI RPC Demo
 #
 
+#---------------------------------#
+#-      Find Boost Libraries     -#
+#---------------------------------#
+find_package( Boost REQUIRED
+                COMPONENTS
+                    serialization
+            )
+include_directories( ${Boost_INCLUDE_DIRS})
+
 #  Add the Spawn Demo Sources
 set( MPI_RPC_DEMO_SOURCES
     MPI_RPC_Address_Table.cpp
+    MPI_RPC_Message_Builder.cpp
     MPI_RPC_Server.cpp
 )
 
@@ -16,6 +26,7 @@ set( MPI_RPC_DEMO_SOURCES
 set( MPI_RPC_DEMO_HEADERS
     MPI_RPC_Address_Table.hpp
     MPI_RPC_Arguments.hpp
+    MPI_RPC_Message_Builder.hpp
     MPI_RPC_Server.hpp
     MPI_RPC_Results.hpp
 )
@@ -39,11 +50,15 @@ add_executable( rpc-server
 #-      Link Libraries       -#
 #-----------------------------#
 target_link_libraries( rpc-demo
+                       MPI_Demo_Common
                        ${MPI_LIBRARIES}
+                       ${Boost_LIBRARIES}
 )
 
 target_link_libraries( rpc-server
+                       MPI_Demo_Common
                        ${MPI_LIBRARIES}
+                       ${Boost_LIBRARIES}
 )
 
 

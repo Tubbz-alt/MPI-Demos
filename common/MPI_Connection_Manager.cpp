@@ -60,6 +60,16 @@ void MPI_Connection::Send_Message( const std::string& message, const int& rank )
 
 
 /**
+ * Send Message
+*/
+void MPI_Connection::Send_Message( const char* message,
+                                   const int&  message_size_bytes,
+                                   const int&  rank )
+{
+    MPI_Send( message, message_size_bytes, MPI_CHAR, rank, 0, m_intra_communicator );
+}
+
+/**
  * Receive Message
 */
 std::string MPI_Connection::Recv_Message( ){

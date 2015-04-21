@@ -47,6 +47,14 @@ class MPI_Connection{
          * @brief Send Message
         */
         void Send_Message( const std::string& message, const int& rank );
+        
+
+        /**
+         * @brief Send Message
+         */
+        void Send_Message( const char* message,
+                           const int& message_size_bytes,
+                           const int& rank );
 
         /**
          * @brief Receive Message

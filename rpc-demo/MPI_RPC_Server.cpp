@@ -5,6 +5,10 @@
 */
 #include "MPI_RPC_Server.hpp"
 
+// RPC Libraries
+#include "MPI_RPC_Message_Builder.hpp"
+
+
 // C++ Standard Libraries
 #include <cstdlib>
 #include <iostream>
@@ -41,9 +45,9 @@ MPI_RPC_Host::MPI_RPC_Host()
 /**
  * Execute Command
 */
-void MPI_RPC_Host::Execute_Command( const std::string& method_name,
-                                    MPI_RPC_Arguments const& arguments,
-                                    MPI_RPC_Results   const& results )
+void MPI_RPC_Host::Execute_Command( const std::string&        method_name,
+                                    MPI_RPC_Arguments const&  arguments,
+                                    MPI_RPC_Results&          results )
 {
     // Fetch the host
     MPI_RPC_Host::ptr_t host = host_instance;
@@ -60,7 +64,7 @@ void MPI_RPC_Host::Execute_Command( const std::string& method_name,
     }
 
     // Send the Message
-    MPI_RPC_Message_Builder message( method_name, arguments, results );
+    MPI_RPC_Message_Builder message( method_name, arguments );
 
     connection->Send_Message( message.Get_Buffer(), 
                               message.Get_Buffer_Size_Bytes(),

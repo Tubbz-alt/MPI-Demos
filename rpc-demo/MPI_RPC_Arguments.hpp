@@ -9,6 +9,13 @@
 // C++ Standard Libraries
 #include <vector>
 
+// Boost Serializable
+#include <boost/archive/binary_oarchive.hpp>
+#include <boost/iostreams/stream.hpp>
+#include <boost/iostreams/device/back_inserter.hpp>
+#include <boost/serialization/vector.hpp>
+
+
 /**
  * @class MPI_RPC_Arguments
 */
@@ -28,6 +35,16 @@ class MPI_RPC_Arguments{
             }
         }
 
+        
+        /**
+         * @brief Serialize
+         */
+        template<class Archive>
+        void serialize(Archive &ar, const unsigned int version)
+        {
+            // save/load base class information
+            ar & m_buffer_data;
+        }
 
     private:
         
